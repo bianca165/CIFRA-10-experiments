@@ -1,0 +1,10 @@
+# Exclude Python virtual environment
+venv/
+*.pyc
+
+# Exclude IDE files (PyCharm specific)
+.idea/
+
+# Exclude large data files / model checkpoints
+*.h5
+*.onnx
