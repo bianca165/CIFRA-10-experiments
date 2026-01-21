@@ -23,9 +23,7 @@ print(f"Standard deviation (R, G, B): {std}")
 print(f"Val Min: {np.min(x_train_norm)}")  # should be 0.0
 print(f"Val Max: {np.max(x_train_norm)}")  # should be 1.0
 
-# Această secțiune se traduce direct în Tabela ta de Statistici.
-
-# Reshape data
+# reshape data
 x_train_flat = x_train_norm.reshape(-1, 3)
 
 plt.figure(figsize=(15, 5))
@@ -44,9 +42,6 @@ for i in range(3):
 plt.tight_layout()
 plt.show()
 
-# Interpretare: Comentează forma distribuțiilor (probabil o distribuție bimodală
-# sau înclinată, nu perfect normală).
-
 img_mean = np.mean(x_train_norm, axis=(1, 2))
 
 correlation_matrix = np.corrcoef(img_mean, rowvar=False)
@@ -62,8 +57,6 @@ plt.yticks(ticks=[0, 1, 2], labels=['Red', 'Green', 'Blue'])
 plt.title('Color channel correlation matrix')
 plt.show()
 
-# Interpretare: Valorile apropiate de 1.0 indică o corelație puternică (dacă R crește, G crește).
-# În CIFAR-10, te aștepți la o corelație pozitivă puternică între canale.
 
 # Independence check (scatter plot)
 plt.figure(figsize=(6, 5))
@@ -74,7 +67,7 @@ plt.ylabel("Green intensity")
 plt.grid(True, linestyle='--', alpha=0.5)
 plt.show()
 
-# add noise sigma = 0.1)
+# add noise sigma = 0.1
 sigma = 0.1
 zgomot = np.random.normal(loc=0.0, scale=sigma, size=x_train_norm.shape)
 x_train_noisy = x_train_norm + zgomot
@@ -99,7 +92,7 @@ for i in range(n_afisari):
 plt.tight_layout()
 plt.show()
 
-# Flatten to pixels and compute PCA (principal components importance)
+# pixels and compute PCA (principal components importance)
 pca = PCA(n_components=3)
 pca.fit(x_train_flat)
 
