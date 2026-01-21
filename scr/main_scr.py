@@ -6,14 +6,11 @@ from scr.models import AutoencoderScratch, KMeansScratch
 from scr.train_engine import train_one_epoch, cross_validation
 from scr.metrics import silhouette_score_manual
 from sklearn.metrics import calinski_harabasz_score, adjusted_rand_score
-from visualization import (
-    plot_reconstruction,
-    plot_loss_curve,
-    plot_latent_clusters
-)
+from visualization import plot_reconstruction, plot_loss_curve, plot_latent_clusters
+from k_selection import elbow_method, plot_elbow, silhouette_method, plot_silhouette
 
 DATA_PATH = '../data/cifar-10-batches-py'
-EPOCHS = 20
+EPOCHS = 10
 BATCH_SIZE = 64
 
 def explain_with_shap_scratch(model, x_data):
@@ -46,13 +43,13 @@ def optimize_hyperparameters(x_train, k_folds=3):
         print(f"\ntesting learning rate: {lr}")
         scores = cross_validation(x_train, k_folds=k_folds, epochs=3, lr=lr)
         mean_mse = np.mean(scores)
-        print(f"  > mean MSE: {mean_mse:.5f}")
+        print(f"  mean MSE: {mean_mse:.5f}")
 
         if mean_mse < best_score:
             best_score = mean_mse
             best_lr = lr
 
-    print(f"\n>>> best lr: {best_lr} (MSE: {best_score:.5f})")
+    print(f"\n best lr: {best_lr} (MSE: {best_score:.5f})")
     return best_lr
 
 
@@ -88,6 +85,11 @@ def main():
     plot_reconstruction(x_noisy[:5], reconstructed_images, n=5)
 
     latent_vectors = model.encode(x_noisy)
+
+    # ks_elbow, wcss = elbow_method(latent_vectors, k_min=2, k_max=12)
+    # plot_elbow(ks_elbow, wcss)
+    # ks_sil, scores = silhouette_method(latent_vectors, k_min=2, k_max=11)
+    # plot_silhouette(ks_sil, scores)
 
     kmeans = KMeansScratch(k=10)
     kmeans.fit(latent_vectors)

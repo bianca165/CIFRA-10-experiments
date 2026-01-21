@@ -9,7 +9,6 @@ class Sigmoid:
         # s * (1 - s)
         return grad_output * self.output * (1 - self.output)
 
-
 class DenseLayer:
     def __init__(self, input_size, output_size, learning_rate=0.01):
         self.weights = np.random.randn(input_size, output_size) * np.sqrt(2. / input_size)
@@ -52,10 +51,9 @@ class AutoencoderScratch:
         return self.enc_act.forward(self.enc_layer.forward(x))
 
     def backward(self, x_input, x_recon):
-        # manual backpropagation
         batch_size = x_input.shape[0]
 
-        # loss derivative = 2 * (predicted - true) / N
+        # loss func = 1/ N SUM (predicted - true)^2
         grad_output = 2 * (x_recon - x_input) / x_input.size
 
         grad = self.dec_act.backward(grad_output)
