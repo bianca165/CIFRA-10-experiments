@@ -11,7 +11,8 @@ class Sigmoid:
 
 class DenseLayer:
     def __init__(self, input_size, output_size, learning_rate=0.01):
-        self.weights = np.random.randn(input_size, output_size) * np.sqrt(2. / input_size)
+        limit = np.sqrt(6 / (input_size + output_size))
+        self.weights = np.random.uniform(-limit, limit, (input_size, output_size))
         self.bias = np.zeros((1, output_size))
         self.lr = learning_rate
 
@@ -41,18 +42,11 @@ class AutoencoderScratch:
         self.dec_layer = DenseLayer(latent_dim, input_dim, lr)
         self.dec_act = Sigmoid()
 
-    def forward(self, x):
-        latent = self.encode(x)
-        reconstructed = self.dec_act.forward(self.dec_layer.forward(latent))
-        return reconstructed
-
     def encode(self, x):
         # latent vector
         return self.enc_act.forward(self.enc_layer.forward(x))
 
     def backward(self, x_input, x_recon):
-        batch_size = x_input.shape[0]
-
         # loss func = 1/ N SUM (predicted - true)^2
         grad_output = 2 * (x_recon - x_input) / x_input.size
 
@@ -62,6 +56,10 @@ class AutoencoderScratch:
         grad = self.enc_act.backward(grad)
         self.enc_layer.backward(grad)
 
+    def forward(self, x):
+        latent = self.encode(x)
+        reconstructed = self.dec_act.forward(self.dec_layer.forward(latent))
+        return reconstructed
 
 class KMeansScratch:
     def __init__(self, k=10, max_iters=100, tol=1e-4):

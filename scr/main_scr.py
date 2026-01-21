@@ -7,7 +7,7 @@ from scr.train_engine import train_one_epoch, cross_validation
 from scr.metrics import silhouette_score_manual
 from sklearn.metrics import calinski_harabasz_score, adjusted_rand_score
 from visualization import plot_reconstruction, plot_loss_curve, plot_latent_clusters
-from k_selection import elbow_method, plot_elbow, silhouette_method, plot_silhouette
+# from k_selection import elbow_method, plot_elbow, silhouette_method, plot_silhouette
 
 DATA_PATH = '../data/cifar-10-batches-py'
 EPOCHS = 10
